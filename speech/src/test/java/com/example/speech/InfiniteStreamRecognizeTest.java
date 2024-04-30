@@ -26,7 +26,6 @@ public class InfiniteStreamRecognizeTest {
 
 @Test
     public void testInfiniteStreamingRecognize() throws Exception {
-        // Mock dependencies
         SpeechClient mockClient = Mockito.mock(SpeechClient.class);
         ClientStream<StreamingRecognizeRequest> mockClientStream = Mockito.mock(ClientStream.class);
         StreamController mockStreamController = Mockito.mock(StreamController.class);
@@ -42,7 +41,6 @@ public class InfiniteStreamRecognizeTest {
         // Mock stream controller behavior
         doNothing().when(mockStreamController).cancel();
 
-        // Create instance of SpeechService and call the method
         SpeechService speechService = new SpeechService();
         speechService.setSpeechClient(mockClient);
 
