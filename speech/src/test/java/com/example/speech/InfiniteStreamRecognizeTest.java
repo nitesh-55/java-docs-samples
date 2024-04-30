@@ -10,12 +10,17 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import com.google.api.gax.rpc.ClientStream;
+import com.google.api.gax.rpc.StreamController;
+import com.google.cloud.speech.v1p1beta1.SpeechClient;
+import com.google.cloud.speech.v1p1beta1.StreamingRecognizeRequest;
+import com.google.cloud.speech.v1p1beta1.StreamingRecognizeResponse;
 
 @RunWith(JUnit4.class)
 public class InfiniteStreamRecognizeTest {
 
   @Test
-    public void testZeroMillis() {
+    public void testconvertMillisToDate() {
         String testZeroMillis = convertMillisToDate(0.0);
         assertEquals("00:00/", testZeroMillis);
          String largeValue = convertMillisToDate(3600000.0); // 1 hour
@@ -34,11 +39,9 @@ public class InfiniteStreamRecognizeTest {
         Mockito.when(mockClient.streamingRecognizeCallable()).thenReturn((StreamingCallable<StreamingRecognizeRequest, StreamingRecognizeResponse>) mock(StreamingCallable.class));
         Mockito.when(mockClient.streamingRecognizeCallable().splitCall(any())).thenReturn(mockClientStream);
 
-        // Mock client stream behavior
         Mockito.doNothing().when(mockClientStream).closeSend();
         Mockito.when(mockClientStream.send(any())).thenReturn(null);
 
-        // Mock stream controller behavior
         doNothing().when(mockStreamController).cancel();
 
         SpeechService speechService = new SpeechService();
